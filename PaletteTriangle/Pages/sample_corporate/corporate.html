@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Corporate website</title>
+  <style>
+    body{
+      background-color: #fff;  /* color designated */
+      color: #333;  /* color designated */
+      font-family: Tahoma, Helvetica, sans-serif;
+      min-width: 480px;
+      margin: 0;
+      padding: 0;
+    }
+
+    header{ width: 100%;}
+
+    header div#logo{
+      color: #ddd;   /* color designated */
+      text-shadow: 1px 1px 1px #efefef, -1px -1px 1px #666;   /* color designated */
+      padding: 0;
+      margin: 30px 0 5px 0;
+      text-align: center;
+      line-height: 60px;
+      font-size: 50px;
+      font-family: Myriad, Helvetica, Arial, sans-serif;
+      font-weight: bold;
+    }
+    
+    header div.caption{
+      color: #333;   /* color designated */
+      text-shadow: 1px 1px 1px #eee, -1px -1px 1px #CCCCCC;
+      font-size: 0.9em;
+      line-height: 1.2em;
+      font-style: italic;
+      text-align: center;
+      margin: 0 0 30px 0;
+    }
+
+    nav#global{
+      background-color: #333;  /* color designated */
+      border-top: solid 1px #333;  /* color designated */
+      border-bottom: solid 1px #333;  /* color designated */
+      height: 3em;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      font-size: 0.8em;
+      clear: both;
+    }
+    nav#global ul li{
+     display: inline-block;
+     float: left;
+     list-style: none;
+     line-height: 3em;
+     text-align: center;
+     width: 20%;
+    }
+
+    nav#global ul li a{
+      color: #fff;  /* color designated */
+      text-decoration: none;
+      font-family: "Open sans"
+    }
+
+    div#eyecatch{
+      background: linear-gradient(#ccc, #ffffff);  /* color designated */
+      width: 100%;
+      height: 300px;
+      margin: 0;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    div#eyecatch p{
+      color: #fff;  /* color designated */
+      text-shadow: 0px 0px 20px #888;  /* color designated */
+      line-height: 256px;
+      margin: 22px 0 0 0;
+      padding: 0;
+      font-size: 50px;
+      font-family: "Lucida Bright", Georgia, serif;
+      font-weight: bold;
+      font-style: italic;
+      letter-spacing: -2px;
+    }
+
+    div#eyecatch p img{
+         vertical-align: middle;
+         border: none;
+    }
+
+    nav.topic{
+      background-color: #eee;  /* color designated */
+      border: solid 1px #ccc;  /* color designated */
+      border-radius: 10px;
+      width: 28%;
+      min-width: 90px;
+      height: 200px;
+      padding: 20px 2%;
+      margin: 20px 1% 0 0;
+      float: left;
+      font-size: 2em;
+      overflow: hidden;
+    }
+    nav.topic:last-of-type{ margin-left: 0; }
+
+    nav.topic h1{
+      color: #ccc;  /* color designated */
+      text-shadow: -1px -1px 1px #666, 1px 1px 1px #fff;
+      border-bottom: groove 2px #fff;  /* color designated */
+      font-size: 30px;
+      padding: 0 0 15px 0;
+      margin: 0 0 10px 0;
+    }
+
+    nav.topic p{
+      font-size: 12px;
+      line-height: 1.5em;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.balloon {
+    color: #ffffff;  /* color designated */
+    border: 1px solid #5f5f5f;  /* color designated */
+    background: #5f5f5f;  /* color designated */
+    box-shadow:1px 3px 7px 0px  #666666;  /* color designated */
+    position: relative;
+    font-size: 16pt ;
+    margin: 10px 10px 20px 10px;
+    padding: 10px 5px 10px 10px;
+    border-radius: 3px;
+}
+    h1.balloon:after, h1.balloon:before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    height: 0;
+    width: 0;
+}
+    h1.balloon:after {
+    border: 10px solid transparent;
+    border-top: 10px solid #5f5f5f;  /* color designated */
+    left: 40px;
+}
+    h1.balloon:before {
+    border: 10px solid transparent;
+    border-top: 10px solid #ffffff;  /* color designated */
+    left: 40px; 
+}
+
+    section.news{
+      width: 66%;
+      margin: 15px 15px 15px 0;
+      float: left;
+    }
+
+    section.tn{
+      border: solid 1px #ccc;  /* color designated */
+      width: 25%;
+      min-width: 200px;
+      margin: 15px 0 15px 15px;
+      padding: 15px;
+      float: left;
+    }
+
+    section.tn ul{
+      margin: 0;
+      padding: 0;
+    }
+
+    section.tn ul li{
+      border-left: solid 2.2em #ccc;  /* color designated */
+      list-style: none;
+      margin: 0 0 5px 0;
+      padding: 0 0 0 5px;
+      font-size: 15px;
+      font-style: italic;
+      font-family: serif;
+    }
+
+    h1.small{
+      color: #666;  /* color designated */
+      border-bottom: dotted 1px #ccc;  /* color designated */
+      font-size: 20px;
+      margin: 0 0 15px 0;
+      padding: 0 0 10px 0;
+    }
+
+    div.container, nav#global ul{
+      width: 80%;
+      max-width: 1000px;
+      margin: 0 auto;
+      clear: both;
+      overflow: auto;
+    }
+
+    footer{
+      background-color: #333;  /* color designated */
+      border-top: solid 1px #333;  /* color designated */
+      color: #fff;  /* color designated */
+      font-size: 0.9em;
+      margin: 0;
+      padding: 2em 0;
+    }
+
+    footer address, footer aside{
+      width: 30%;
+      min-width: 180px;
+      margin: 0;
+      padding: 10px;
+      float: left;
+      font-size: 0.9em;
+    }
+
+    footer h1{
+      margin: 0;
+      padding: 0 0 10px 0;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div id="logo">Corporate</div>
+      <div class="caption">Sample webpage for business.</div>
+    </div>
+    <nav id="global">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Why us</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+    <div id="eyecatch">
+      <p>New product released! <img src="./1386696651_Wood2_256.png" alt="#" /></p>
+    </div>
+  </header>
+  <div class="container">
+    <nav class="topic"><h1>The best solution ever.</h1><p>sample text, sample text, sample text, sample text, sample text. sample text, sample text, sample text, sample text, sample text. sample text, sample text, sample text, sample text, sample text.</p></nav>
+    <nav class="topic"><h1>Why people choose us.</h1><p>sample text, sample text, sample text, sample text, sample text. sample text, sample text, sample text, sample text, sample text. sample text, sample text, sample text, sample text, sample text.</p></nav>
+    <nav class="topic"><h1>Getting more features.</h1><p>sample text, sample text, sample text, sample text, sample text. sample text, sample text, sample text, sample text, sample text. sample text, sample text, sample text, sample text, sample text.</p></nav>
+  </div>
+  <div class="container">
+    <section class="news">
+      <h1 class="balloon">News</h1>
+      <ul>
+        <li>We released new service. -Dec 12, 2013</li>
+        <li>We released new service. -Dec 12, 2013</li>
+        <li>We released new service. -Dec 12, 2013</li>
+        <li>We released new service. -Dec 12, 2013</li>
+      </ul>
+    </section>
+    <section class="tn">
+      <h1 class="small">Customers voice</h1>
+      <ul>
+        <li>"Best service I have ever!"<br />-Ledmond</li>
+        <li>"Best service I have ever!"<br />-Ledmond</li>
+        <li>"Best service I have ever!"<br />-Ledmond</li>
+        <li>"Best service I have ever!"<br />-Ledmond</li>
+        <li>"Best service I have ever!"<br />-Ledmond</li>
+      </ul>
+    </section>
+  </div>
+  <footer>
+    <div class="container">
+      <address>000-0000 hogehoge city, hogehoge-hoge XXX-XXX foo bldg 3F, JAPAN<br />&gt;&gt;&gt; MAP</address>
+      <aside>
+        <h1>Products</h1>
+        <ul>
+          <li>Small appliances</li>
+          <li>Major appliances</li>
+          <li>Custom order</li>
+          <li>Works</li>
+        </ul>
+      </aside>
+      <aside>
+        <h1>Follow us on</h1>
+        <ul>
+          <li>Facebook</li>
+          <li>Twitter</li>
+          <li>LinkedIn</li>
+          <li>Google+</li>
+        </ul>
+      </aside>
+    </div>
+  </footer>
+</body>
+</html>
