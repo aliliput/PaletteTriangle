@@ -5,7 +5,9 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:vm="clr-namespace:PaletteTriangle.ViewModels"
-        Title="PaletteTriangle" Height="600" Width="800">
+        xmlns:cefglue="clr-namespace:Xilium.CefGlue.WPF;assembly=Xilium.CefGlue.WPF"
+        Title="PaletteTriangle" Height="600" Width="800"
+        Closed="Window_Closed">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -77,7 +79,7 @@
 
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-            <WebBrowser x:Name="browser" Grid.Column="2" Navigating="browser_Navigating" />
+            <cefglue:WpfCefBrowser x:Name="browser" Grid.Column="2" StartUrl="http://www.google.com" />
         </Grid>
     </Grid>
 </Window>

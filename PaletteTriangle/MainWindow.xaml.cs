@@ -40,7 +40,7 @@ namespace PaletteTriangle
                 },
                 {
                     () => this.viewModel.CurrentPage,
-                    (_, __) => this.browser.Navigate(this.viewModel.CurrentPage.IndexUri)
+                    (_, __) => this.browser.NavigateTo(this.viewModel.CurrentPage.IndexUri.ToString())
                 }
             };
         }
@@ -49,6 +49,13 @@ namespace PaletteTriangle
         {
             if (!e.Uri.AbsoluteUri.StartsWith(this.viewModel.CurrentPage.DirectoryUri.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase))
                 e.Cancel = true;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            this.browser.Dispose();
+            this.viewModelPropertyChangedEventListener.Dispose();
+            this.viewModel.Dispose();
         }
     }
 }
