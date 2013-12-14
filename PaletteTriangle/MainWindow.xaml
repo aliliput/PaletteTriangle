@@ -12,10 +12,39 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     
+    <Window.Resources>
+        <ContextMenu x:Key="colorsContextMenu">
+            <ContextMenu.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="16" Height="16">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="{Binding Color}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <TextBlock Text="{Binding DisplayName}" Margin="6,0,0,0" />
+                    </StackPanel>
+                </DataTemplate>
+            </ContextMenu.ItemTemplate>
+
+            <ContextMenu.ItemContainerStyle>
+                <Style TargetType="MenuItem">
+                    <EventSetter Event="Click" Handler="colorsContextMenuItem_Click" />
+                </Style>
+            </ContextMenu.ItemContainerStyle>
+        </ContextMenu>
+    </Window.Resources>
+    
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
         </i:EventTrigger>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="OpenPaletteFiles">
+            <l:OpenFileDialogInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="MessageBox">
+            <l:InformationDialogInteractionMessageAction />
+        </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
     
     <Grid>
@@ -45,8 +74,26 @@
                     </Style>
                 </MenuItem.Resources>
             </MenuItem>
-            <MenuItem Header="パレット">
+            
+            <MenuItem x:Name="palettesMenu" Header="パレット">
+                <Separator />
+                <MenuItem Header="追加">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddPalettes" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </MenuItem>
 
+                <MenuItem.Resources>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Enabled}" Value="True">
+                                <Setter Property="IsChecked" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Resources>
             </MenuItem>
         </Menu>
 
@@ -75,11 +122,17 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <EventSetter Event="MouseLeftButtonUp" Handler="colorsListBoxItem_MouseLeftButtonUp" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
 
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-            <cefglue:WpfCefBrowser x:Name="browser" Grid.Column="2" StartUrl="http://www.google.com" />
+            <cefglue:WpfCefBrowser x:Name="browser" Grid.Column="2" />
         </Grid>
     </Grid>
 </Window>

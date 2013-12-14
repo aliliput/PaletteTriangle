@@ -1,6 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using Livet;
 using Livet.EventListeners;
+using Livet.Messaging;
+using Livet.Messaging.IO;
 using PaletteTriangle.Models;
 
 namespace PaletteTriangle.ViewModels
@@ -26,6 +32,10 @@ namespace PaletteTriangle.ViewModels
                     }
                 }
             });
+            this.CompositeDisposable.Add(new CollectionChangedEventListener(
+                this.Palettes,
+                (sender, e) => this.RaisePropertyChanged(() => this.SelectableColors)
+            ));
         }
 
         public Main Model { get; private set; }
@@ -72,9 +82,41 @@ namespace PaletteTriangle.ViewModels
             }
         }
 
-        public void ReloadPages()
+        public async void ReloadPages()
         {
-            this.Model.LoadPages();
+            await this.Model.LoadPages();
+        }
+
+        public ObservableCollection<Palette> Palettes
+        {
+            get
+            {
+                return this.Model.Palettes;
+            }
+        }
+
+        public IEnumerable<PaletteColorViewModel> SelectableColors
+        {
+            get
+            {
+                return this.Palettes.Where(p => p.Enabled)
+                    .SelectMany(p => p.Colors.Select(c => new PaletteColorViewModel(c)));
+            }
+        }
+
+        public async void AddPalettes()
+        {
+            var msg = await this.Messenger.GetResponseAsync(new OpeningFileSelectionMessage("OpenPaletteFiles")
+            {
+                Title = "パレット追加",
+                Filter = "Adobe Swatch Exchange Format|*.ase|すべてのファイル|*.*",
+                MultiSelect = true
+            });
+
+            var result = await Task.WhenAll(msg.Response.Select(this.Model.AddPalette));
+
+            if (result.Contains(false))
+                await this.Messenger.RaiseAsync(new InformationMessage("パレットの読み込みに失敗しました。", "エラー", MessageBoxImage.Error, "MessageBox"));
         }
     }
 }

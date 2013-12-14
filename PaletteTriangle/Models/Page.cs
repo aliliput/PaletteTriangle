@@ -37,7 +37,8 @@ namespace PaletteTriangle.Models
                                 .Select(s => Tuple.Create(s.Attribute("selector").Value, s.Attribute("property").Value))
                                 .ToArray(),
                             c.Attribute("name").Value,
-                            c.Attribute("default").Value
+                            c.Attribute("default").Value,
+                            c.Attribute("template") != null ? c.Attribute("template").Value : null
                         ))
                         .ToArray()
                 ));

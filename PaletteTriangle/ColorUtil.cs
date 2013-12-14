@@ -107,6 +107,8 @@ namespace PaletteTriangle
                     (byte)(float.Parse(match.Groups["b"].Value) / 100 * 255)
                 );
 
+            //TODO: グラデーション対応
+
             throw new ArgumentException("対応していないフォーマットです。");
         }
     }

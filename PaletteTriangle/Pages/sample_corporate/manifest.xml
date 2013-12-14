@@ -9,5 +9,8 @@
     <color name="文字色" default="#333">
       <selector selector="body" property="color" />
     </color>
+    <color name="ロゴ 影" default="#666">
+      <selector selector="header div#logo" property="text-shadow" template="1px 1px 1px #efefef, -1px -1px 1px {0}" />
+    </color>
   </colors>
 </page>
