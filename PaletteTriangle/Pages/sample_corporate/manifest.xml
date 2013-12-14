@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<page>
+  <title>Corporate</title>
+  <index>corporate.html</index>
+  <colors>
+    <color name="背景" default="#fff">
+      <selector selector="body" property="background-color" />
+    </color>
+    <color name="文字色" default="#333">
+      <selector selector="body" property="color" />
+    </color>
+  </colors>
+</page>

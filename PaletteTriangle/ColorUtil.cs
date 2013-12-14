@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Ink;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 using PaletteTriangle.AdobeSwatchExchange;
 
@@ -29,13 +28,14 @@ namespace PaletteTriangle
                     const double Xn = 0.950456;
                     const double Yn = 1.0;
                     const double Zn = 1.088754;
-                    const double delta = 6 / 29;
+                    const double delta = 6.0 / 29.0;
                     var fy = (entry.Values[0] * 100 + 16) / 116;
                     var fx = fy + entry.Values[1] / 500;
                     var fz = fy - entry.Values[2] / 200;
                     var y = fy > delta ? Yn * Math.Pow(fy, 3) : (fy - 16 / 116) * 3 * Math.Pow(delta, 2);
                     var x = fx > delta ? Xn * Math.Pow(fx, 3) : (fx - 16 / 116) * 3 * Math.Pow(delta, 2);
                     var z = fz > delta ? Zn * Math.Pow(fz, 3) : (fz - 16 / 116) * 3 * Math.Pow(delta, 2);
+                    // ↑ それぞれに Xn, Yn, Zn を掛けなくていいの？
                     var r = 3.240479 * x - 1.53715 * y - 0.498535 * z;
                     var g = -0.969256 * x + 1.875991 * y + 0.041556 * z;
                     var b = 0.055648 * x - 0.204043 * y + 1.057311 * z;
@@ -45,9 +45,69 @@ namespace PaletteTriangle
             }
         }
 
-        public static string ToHex(this Color color)
+        public static string ToCss(this Color color)
         {
-            return BitConverter.ToString(new[] { color.R, color.G, color.B }).Replace("-", "");
+            return color.A == 255
+                ? "#" + BitConverter.ToString(new[] { color.R, color.G, color.B }).Replace("-", "")
+                : string.Format("rbga({0}, {1}, {2}, {3})", color.R, color.G, color.B, color.A / 255f);
+        }
+
+        public static Color FromCss(string color)
+        {
+            color = color.Trim();
+            
+            // Hex
+            if (color.StartsWith("#"))
+            {
+                color = color.Substring(1);
+                if (color.Length == 3)
+                    color = string.Join("", color.SelectMany(c => Enumerable.Repeat(c, 2)));
+                return Color.FromRgb(
+                    byte.Parse(color.Substring(0, 2), NumberStyles.HexNumber),
+                    byte.Parse(color.Substring(2, 2), NumberStyles.HexNumber),
+                    byte.Parse(color.Substring(4, 2), NumberStyles.HexNumber)
+                );
+            }
+
+            // Color name
+            var prop = typeof(Colors).GetProperty(color, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
+            if (prop != null) return (Color)prop.GetValue(null);
+
+            // rgb()
+            var match = Regex.Match(color, @"^rgb\s*\(\s*(?<r>\d+)\s*,\s*(?<g>\d+)\s*,\s*(?<b>\d+)\s*\)$", RegexOptions.IgnoreCase);
+            if (match.Success)
+                return Color.FromRgb(
+                    byte.Parse(match.Groups["r"].Value),
+                    byte.Parse(match.Groups["g"].Value),
+                    byte.Parse(match.Groups["b"].Value)
+                );
+            match = Regex.Match(color, @"^rgb\s*\(\s*(?<r>[\d\.]+)%\s*,\s*(?<g>[\d\.]+)%\s*,\s*(?<b>[\d\.]+)%\s*\)$", RegexOptions.IgnoreCase);
+            if (match.Success)
+                return Color.FromRgb(
+                    (byte)(float.Parse(match.Groups["r"].Value) / 100 * 255),
+                    (byte)(float.Parse(match.Groups["g"].Value) / 100 * 255),
+                    (byte)(float.Parse(match.Groups["b"].Value) / 100 * 255)
+                );
+
+            // rgba()
+            match = Regex.Match(color, @"^rgba\s*\(\s*(?<r>\d+)\s*,\s*(?<g>\d+)\s*,\s*(?<b>\d+)\s*,\s*(?<a>[\d\.]+)\s*\)$", RegexOptions.IgnoreCase);
+            if (match.Success)
+                return Color.FromArgb(
+                    (byte)(float.Parse(match.Groups["a"].Value) * 255),
+                    byte.Parse(match.Groups["r"].Value),
+                    byte.Parse(match.Groups["g"].Value),
+                    byte.Parse(match.Groups["b"].Value)
+                );
+            match = Regex.Match(color, @"^rgba\s*\(\s*(?<r>[\d\.]+)%\s*,\s*(?<g>[\d\.]+)%\s*,\s*(?<b>[\d\.]+)%\s*,\s*(?<a>[\d\.]+)\s*\)$", RegexOptions.IgnoreCase);
+            if (match.Success)
+                return Color.FromArgb(
+                    (byte)(float.Parse(match.Groups["a"].Value) * 255),
+                    (byte)(float.Parse(match.Groups["r"].Value) / 100 * 255),
+                    (byte)(float.Parse(match.Groups["g"].Value) / 100 * 255),
+                    (byte)(float.Parse(match.Groups["b"].Value) / 100 * 255)
+                );
+
+            throw new ArgumentException("対応していないフォーマットです。");
         }
     }
 }
