@@ -107,11 +107,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="6">
-                            <Rectangle Width="32" Height="32">
-                                <Rectangle.Fill>
-                                    <SolidColorBrush Color="{Binding Color}" />
-                                </Rectangle.Fill>
-                            </Rectangle>
+                            <Rectangle Width="32" Height="32" Fill="{Binding Color}" />
                             <StackPanel Margin="6,0,0,0">
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                 <TextBlock Text="{Binding CssFormat}" />

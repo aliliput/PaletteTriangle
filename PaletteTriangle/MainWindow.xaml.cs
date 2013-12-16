@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Livet;
 using Livet.EventListeners;
@@ -138,7 +139,7 @@ namespace PaletteTriangle
         {
             var item = sender as MenuItem;
             var color = this.colorsContextMenu.Tag as ColorViewModel;
-            color.Model.Color = (item.DataContext as PaletteColorViewModel).Color;
+            color.Model.Color = new SolidColorBrush((item.DataContext as PaletteColorViewModel).Color);
         }
 
         private async Task RunScript(string script)

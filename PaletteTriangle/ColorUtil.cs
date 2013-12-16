@@ -52,7 +52,13 @@ namespace PaletteTriangle
                 : string.Format("rbga({0}, {1}, {2}, {3})", color.R, color.G, color.B, color.A / 255f);
         }
 
-        public static Color FromCss(string color)
+        public static string ToCss(this Brush brush)
+        {
+            //TODO
+            return (brush as SolidColorBrush).Color.ToCss();
+        }
+
+        public static Brush FromCss(string color)
         {
             color = color.Trim();
             
@@ -62,50 +68,50 @@ namespace PaletteTriangle
                 color = color.Substring(1);
                 if (color.Length == 3)
                     color = string.Join("", color.SelectMany(c => Enumerable.Repeat(c, 2)));
-                return Color.FromRgb(
+                return new SolidColorBrush(Color.FromRgb(
                     byte.Parse(color.Substring(0, 2), NumberStyles.HexNumber),
                     byte.Parse(color.Substring(2, 2), NumberStyles.HexNumber),
                     byte.Parse(color.Substring(4, 2), NumberStyles.HexNumber)
-                );
+                ));
             }
 
             // Color name
-            var prop = typeof(Colors).GetProperty(color, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
-            if (prop != null) return (Color)prop.GetValue(null);
+            var prop = typeof(Brushes).GetProperty(color, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase);
+            if (prop != null) return (SolidColorBrush)prop.GetValue(null);
 
             // rgb()
             var match = Regex.Match(color, @"^rgb\s*\(\s*(?<r>\d+)\s*,\s*(?<g>\d+)\s*,\s*(?<b>\d+)\s*\)$", RegexOptions.IgnoreCase);
             if (match.Success)
-                return Color.FromRgb(
+                return new SolidColorBrush(Color.FromRgb(
                     byte.Parse(match.Groups["r"].Value),
                     byte.Parse(match.Groups["g"].Value),
                     byte.Parse(match.Groups["b"].Value)
-                );
+                ));
             match = Regex.Match(color, @"^rgb\s*\(\s*(?<r>[\d\.]+)%\s*,\s*(?<g>[\d\.]+)%\s*,\s*(?<b>[\d\.]+)%\s*\)$", RegexOptions.IgnoreCase);
             if (match.Success)
-                return Color.FromRgb(
+                return new SolidColorBrush(Color.FromRgb(
                     (byte)(float.Parse(match.Groups["r"].Value) / 100 * 255),
                     (byte)(float.Parse(match.Groups["g"].Value) / 100 * 255),
                     (byte)(float.Parse(match.Groups["b"].Value) / 100 * 255)
-                );
+                ));
 
             // rgba()
             match = Regex.Match(color, @"^rgba\s*\(\s*(?<r>\d+)\s*,\s*(?<g>\d+)\s*,\s*(?<b>\d+)\s*,\s*(?<a>[\d\.]+)\s*\)$", RegexOptions.IgnoreCase);
             if (match.Success)
-                return Color.FromArgb(
+                return new SolidColorBrush(Color.FromArgb(
                     (byte)(float.Parse(match.Groups["a"].Value) * 255),
                     byte.Parse(match.Groups["r"].Value),
                     byte.Parse(match.Groups["g"].Value),
                     byte.Parse(match.Groups["b"].Value)
-                );
+                ));
             match = Regex.Match(color, @"^rgba\s*\(\s*(?<r>[\d\.]+)%\s*,\s*(?<g>[\d\.]+)%\s*,\s*(?<b>[\d\.]+)%\s*,\s*(?<a>[\d\.]+)\s*\)$", RegexOptions.IgnoreCase);
             if (match.Success)
-                return Color.FromArgb(
+                return new SolidColorBrush(Color.FromArgb(
                     (byte)(float.Parse(match.Groups["a"].Value) * 255),
                     (byte)(float.Parse(match.Groups["r"].Value) / 100 * 255),
                     (byte)(float.Parse(match.Groups["g"].Value) / 100 * 255),
                     (byte)(float.Parse(match.Groups["b"].Value) / 100 * 255)
-                );
+                ));
 
             //TODO: グラデーション対応
 

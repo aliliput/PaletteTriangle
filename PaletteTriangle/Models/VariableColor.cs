@@ -19,8 +19,8 @@ namespace PaletteTriangle.Models
         public string Name { get; private set; }
         public string Default { get; private set; }
 
-        private Color color;
-        public Color Color
+        private Brush color;
+        public Brush Color
         {
             get
             {

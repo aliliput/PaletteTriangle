@@ -33,7 +33,7 @@ namespace PaletteTriangle.ViewModels
             }
         }
 
-        public Color Color
+        public Brush Color
         {
             get
             {
