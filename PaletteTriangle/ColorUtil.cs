@@ -54,8 +54,14 @@ namespace PaletteTriangle
 
         public static string ToCss(this Brush brush)
         {
-            //TODO
-            return (brush as SolidColorBrush).Color.ToCss();
+            var solid = brush as SolidColorBrush;
+            if (solid != null)
+                return solid.Color.ToCss();
+            var linear = brush as LinearGradientBrush;
+            if (linear != null)
+                return string.Format("linear-gradient({0})", string.Join(", ", linear.GradientStops.Select(s => s.Color)));
+
+            throw new ArgumentException("対応していない brush です。");
         }
 
         public static Brush FromCss(string color)
@@ -113,7 +119,20 @@ namespace PaletteTriangle
                     (byte)(float.Parse(match.Groups["b"].Value) / 100 * 255)
                 ));
 
-            //TODO: グラデーション対応
+            // linear-gradient()
+            match = Regex.Match(color, @"^linear-gradient\s*\(\s*(.+)\s*\)$", RegexOptions.IgnoreCase);
+            if(match.Success)
+            {
+                var colors = match.Groups[1].Value.Split(',')
+                    .Select(s => s.Trim())
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => (FromCss(s) as SolidColorBrush).Color)
+                    .ToArray();
+                var n = 1.0 / colors.Length;
+                return new LinearGradientBrush(new GradientStopCollection(colors.Select((c, i) => new GradientStop(c, n * i))), 90);
+            }
+
+            // radial-gradient() なんて知らない
 
             throw new ArgumentException("対応していないフォーマットです。");
         }

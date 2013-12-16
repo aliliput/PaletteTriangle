@@ -12,5 +12,8 @@
     <color name="ロゴ 影" default="#666">
       <selector selector="header div#logo" property="text-shadow" template="1px 1px 1px #efefef, -1px -1px 1px {0}" />
     </color>
+    <color name="アイキャッチ 背景" default="linear-gradient(#ccc, #ffffff)">
+      <selector selector="div#eyecatch" property="background" />
+    </color>
   </colors>
 </page>
