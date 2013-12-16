@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace PaletteTriangle.ViewModels
                     () => this.Model.Pages,
                     (sender, e) =>
                     {
-                        var newPages = this.Model.Pages.Select(p => new PageViewModel(this, p)).ToArray();
+                        var newPages = this.Model.Pages.Select(p => new PageViewModel(this, p)).ToReadOnlyCollection();
                         var newCurrentPage = this.CurrentPage != null
                             ? newPages.FirstOrDefault(p => p.DirectoryUri == this.CurrentPage.DirectoryUri)
                             : null;
@@ -36,6 +37,11 @@ namespace PaletteTriangle.ViewModels
                 this.Palettes,
                 (sender, e) => this.RaisePropertyChanged(() => this.SelectableColors)
             ));
+            this.CompositeDisposable.Add(new EventListener<EventHandler<CreatedScriptToRunEventArgs>>(
+                h => this.Model.CreatedScriptToRun += h,
+                h => this.Model.CreatedScriptToRun -= h,
+                async (sender, e) => await this.Messenger.RaiseAsync(new GenericInteractionMessage<string>(e.Script, "RunScript"))
+            ));
         }
 
         public Main Model { get; private set; }
@@ -45,8 +51,8 @@ namespace PaletteTriangle.ViewModels
             this.Model.Initialize();
         }
 
-        private PageViewModel[] pages = new PageViewModel[0];
-        public PageViewModel[] Pages
+        private ReadOnlyCollection<PageViewModel> pages = Enumerable.Empty<PageViewModel>().ToReadOnlyCollection();
+        public ReadOnlyCollection<PageViewModel> Pages
         {
             get
             {
@@ -54,6 +60,8 @@ namespace PaletteTriangle.ViewModels
             }
             set
             {
+                if (value == null) throw new ArgumentNullException();
+
                 if (this.pages != value)
                 {
                     this.pages = value;
@@ -75,6 +83,7 @@ namespace PaletteTriangle.ViewModels
                 {
                     var old = this.currentPage;
                     this.currentPage = value;
+                    this.Model.CurrentPage = value.Model;
                     this.RaisePropertyChanged();
                     if (old != null) old.RaiseIsCurrentChanged();
                     value.RaiseIsCurrentChanged();
@@ -85,6 +94,11 @@ namespace PaletteTriangle.ViewModels
         public async void ReloadPages()
         {
             await this.Model.LoadPages();
+        }
+
+        public void LoadedNewPage()
+        {
+            this.Model.ApplyAllColors();
         }
 
         public ObservableCollection<Palette> Palettes

@@ -79,11 +79,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CefAppImpl.cs" />
+    <Compile Include="CollectionUtil.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="Models\CreatedScriptToRunEventArgs.cs" />
     <Compile Include="Models\Main.cs" />
     <Compile Include="Models\Page.cs" />
     <Compile Include="Models\Palette.cs" />
     <Compile Include="Models\PaletteColor.cs" />
+    <Compile Include="Models\Selector.cs" />
     <Compile Include="Models\VariableColor.cs" />
     <Compile Include="ViewModels\ColorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

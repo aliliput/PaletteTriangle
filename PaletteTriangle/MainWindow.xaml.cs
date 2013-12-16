@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Livet;
 using Livet.EventListeners;
+using Livet.Messaging;
 using PaletteTriangle.Models;
 using PaletteTriangle.ViewModels;
+using Xilium.CefGlue;
+using Xilium.CefGlue.WPF;
+using System.Threading.Tasks;
 
 namespace PaletteTriangle
 {
@@ -16,9 +22,13 @@ namespace PaletteTriangle
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly MainWindowViewModel viewModel;
-        readonly LivetCompositeDisposable compositeDisposable = new LivetCompositeDisposable();
-        readonly ContextMenu colorsContextMenu;
+        private readonly MainWindowViewModel viewModel;
+        private readonly LivetCompositeDisposable compositeDisposable = new LivetCompositeDisposable();
+        private readonly ContextMenu colorsContextMenu;
+        private DispatcherTimer timer;
+
+        private CefBrowser cefBrowser;
+        private bool isLoading = false;
 
         public MainWindow()
         {
@@ -68,10 +78,49 @@ namespace PaletteTriangle
                         items.Insert(0, item);
                     });
                 })));
+            this.compositeDisposable.Add(new MessageListener(
+                this.viewModel.Messenger,
+                "RunScript",
+                async m => await this.RunScript((m as GenericInteractionMessage<string>).Value)
+            ));
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.viewModel.Initialize();
+
+            this.timer = new DispatcherTimer();
+            this.timer.Tick += (_, __) =>
+            {
+                if (this.cefBrowser == null)
+                    this.cefBrowser = (CefBrowser)typeof(WpfCefBrowser).InvokeMember(
+                        "_browser",
+                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField,
+                        null,
+                        this.browser,
+                        null
+                    );
+
+                if (this.cefBrowser != null)
+                {
+                    if (!this.isLoading && this.cefBrowser.IsLoading && this.cefBrowser.HasDocument)
+                    {
+                        this.isLoading = true;
+                        this.viewModel.LoadedNewPage();
+                    }
+                    else
+                    {
+                        this.isLoading = this.cefBrowser.IsLoading;
+                    }
+                }
+            };
+            this.timer.Interval = TimeSpan.FromSeconds(0.1);
+            this.timer.Start();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            if (this.timer != null) this.timer.Stop();
             this.compositeDisposable.Dispose();
         }
 
@@ -90,6 +139,17 @@ namespace PaletteTriangle
             var item = sender as MenuItem;
             var color = this.colorsContextMenu.Tag as ColorViewModel;
             color.Model.Color = (item.DataContext as PaletteColorViewModel).Color;
+        }
+
+        private async Task RunScript(string script)
+        {
+            await this.Dispatcher.InvokeAsync(() =>
+            {
+                if (this.cefBrowser == null || !this.cefBrowser.HasDocument) return;
+
+                var frame = this.cefBrowser.GetMainFrame();
+                frame.ExecuteJavaScript(script, frame.Url, 0);
+            });
         }
     }
 }

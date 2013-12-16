@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:PaletteTriangle.ViewModels"
         xmlns:cefglue="clr-namespace:Xilium.CefGlue.WPF;assembly=Xilium.CefGlue.WPF"
         Title="PaletteTriangle" Height="600" Width="800"
-        Closed="Window_Closed">
+        Closed="Window_Closed" Loaded="Window_Loaded">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
@@ -36,9 +36,6 @@
     </Window.Resources>
     
     <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize" />
-        </i:EventTrigger>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="OpenPaletteFiles">
             <l:OpenFileDialogInteractionMessageAction />
         </l:InteractionMessageTrigger>

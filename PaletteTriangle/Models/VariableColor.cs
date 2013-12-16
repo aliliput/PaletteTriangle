@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 using Livet;
 
@@ -6,19 +7,17 @@ namespace PaletteTriangle.Models
 {
     public class VariableColor : NotificationObject
     {
-        public VariableColor(Tuple<string, string>[] selectors, string name, string @default, string template)
+        public VariableColor(IEnumerable<Selector> selectors, string name, string @default)
         {
-            this.Selectors = selectors;
+            this.Selectors = selectors.ToReadOnlyCollection();
             this.Name = name;
             this.Default = @default;
             this.Color = ColorUtil.FromCss(@default);
-            this.Template = template;
         }
 
-        public Tuple<string, string>[] Selectors { get; private set; }
+        public ReadOnlyCollection<Selector> Selectors { get; private set; }
         public string Name { get; private set; }
         public string Default { get; private set; }
-        public string Template { get; private set; }
 
         private Color color;
         public Color Color
