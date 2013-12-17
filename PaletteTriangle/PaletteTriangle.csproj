@@ -142,15 +142,18 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Pages\sample_corporate\1386696651_Wood2_256.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Pages\sample_corporate\corporate.html">
+    <None Include="Pages\sample_corporate\manifest.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Pages\sample_corporate\manifest.xml">
+    <None Include="Pages\sample_corporate\Colortester\1386696651_Wood2_256.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Pages\sample_corporate\Colortester\1386696693_Wood2_128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Pages\sample_corporate\Colortester\corporate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
