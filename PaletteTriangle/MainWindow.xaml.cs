@@ -152,5 +152,10 @@ namespace PaletteTriangle
                 frame.ExecuteJavaScript(script, frame.Url, 0);
             });
         }
+
+        private void copyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(((sender as MenuItem).DataContext as ColorViewModel).CssFormat);
+        }
     }
 }

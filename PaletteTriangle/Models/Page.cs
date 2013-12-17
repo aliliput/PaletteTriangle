@@ -32,7 +32,7 @@ namespace PaletteTriangle.Models
 
         public void SetDefaultColor()
         {
-            this.Colors.ForEach(c => c.Color = ColorUtil.FromCss(c.Default));
+            this.Colors.ForEach(c => c.SetDefaultColor());
         }
 
         public static IEnumerable<Page> EnumeratePages(string directory)

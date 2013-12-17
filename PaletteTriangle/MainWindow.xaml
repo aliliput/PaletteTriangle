@@ -119,6 +119,26 @@
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <EventSetter Event="MouseLeftButtonUp" Handler="colorsListBoxItem_MouseLeftButtonUp" />
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="コピー">
+                                        <MenuItem.Style>
+                                            <Style TargetType="MenuItem">
+                                                <EventSetter Event="Click" Handler="copyMenuItem_Click" />
+                                            </Style>
+                                        </MenuItem.Style>
+                                    </MenuItem>
+                                    <MenuItem Header="デフォルトに戻す">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="SetDefaultColor" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>

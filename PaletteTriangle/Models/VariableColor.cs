@@ -12,7 +12,7 @@ namespace PaletteTriangle.Models
             this.Selectors = selectors.ToReadOnlyCollection();
             this.Name = name;
             this.Default = @default;
-            this.Color = ColorUtil.FromCss(@default);
+            this.SetDefaultColor();
         }
 
         public ReadOnlyCollection<Selector> Selectors { get; private set; }
@@ -31,9 +31,15 @@ namespace PaletteTriangle.Models
                 if (this.color != value)
                 {
                     this.color = value;
+                    if (value.CanFreeze) value.Freeze();
                     this.RaisePropertyChanged();
                 }
             }
+        }
+
+        public void SetDefaultColor()
+        {
+            this.Color = ColorUtil.FromCss(this.Default);
         }
     }
 }

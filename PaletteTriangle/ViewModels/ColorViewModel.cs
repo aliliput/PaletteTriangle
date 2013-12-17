@@ -48,5 +48,10 @@ namespace PaletteTriangle.ViewModels
                 return this.Model.Color.ToCss();
             }
         }
+
+        public void SetDefaultColor()
+        {
+            this.Model.SetDefaultColor();
+        }
     }
 }
