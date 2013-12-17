@@ -128,7 +128,7 @@ namespace PaletteTriangle
                     .Where(s => !string.IsNullOrEmpty(s))
                     .Select(s => (FromCss(s) as SolidColorBrush).Color)
                     .ToArray();
-                var n = 1.0 / colors.Length;
+                var n = 1.0 / (colors.Length - 1);
                 return new LinearGradientBrush(new GradientStopCollection(colors.Select((c, i) => new GradientStop(c, n * i))), 90);
             }
 
