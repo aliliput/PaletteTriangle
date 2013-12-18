@@ -1,10 +1,11 @@
-﻿<Window x:Class="PaletteTriangle.MainWindow"
+﻿<Window x:Class="PaletteTriangle.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:vm="clr-namespace:PaletteTriangle.ViewModels"
+        xmlns:v="clr-namespace:PaletteTriangle.Views"
         xmlns:cefglue="clr-namespace:Xilium.CefGlue.WPF;assembly=Xilium.CefGlue.WPF"
         Title="PaletteTriangle" Height="600" Width="800"
         Closed="Window_Closed" Loaded="Window_Loaded">
@@ -112,6 +113,12 @@
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                 <TextBlock Text="{Binding CssFormat}" />
                             </StackPanel>
+                            
+                            <i:Interaction.Triggers>
+                                <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="ShowColorCanvas">
+                                    <l:TransitionInteractionMessageAction Mode="Modal" WindowType="v:ColorCanvasWindow" />
+                                </l:InteractionMessageTrigger>
+                            </i:Interaction.Triggers>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -129,10 +136,21 @@
                                             </Style>
                                         </MenuItem.Style>
                                     </MenuItem>
+                                    
                                     <MenuItem Header="デフォルトに戻す">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Click">
                                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="SetDefaultColor" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </MenuItem>
+                                    
+                                    <Separator />
+                                    
+                                    <MenuItem Header="色の編集">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="EditColor" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </MenuItem>

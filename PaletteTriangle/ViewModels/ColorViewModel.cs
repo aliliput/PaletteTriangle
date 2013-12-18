@@ -1,6 +1,8 @@
-﻿using System.Windows.Media;
+﻿using System.Linq;
+using System.Windows.Media;
 using Livet;
 using Livet.EventListeners;
+using Livet.Messaging;
 using PaletteTriangle.Models;
 
 namespace PaletteTriangle.ViewModels
@@ -52,6 +54,22 @@ namespace PaletteTriangle.ViewModels
         public void SetDefaultColor()
         {
             this.Model.SetDefaultColor();
+        }
+
+        public async void EditColor()
+        {
+            var solid = this.Color as SolidColorBrush;
+            var vm = new ColorCanvasViewModel(solid != null
+                ? solid.Color
+                : (this.Color as LinearGradientBrush).GradientStops.First().Color
+            );
+            
+            await this.Messenger.GetResponseAsync(new TransitionMessage(vm, "ShowColorCanvas"));
+
+            if (vm.IsSet)
+            {
+                this.Model.Color = new SolidColorBrush(vm.SelectedColor);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ using Xilium.CefGlue;
 using Xilium.CefGlue.WPF;
 using System.Threading.Tasks;
 
-namespace PaletteTriangle
+namespace PaletteTriangle.Views
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック

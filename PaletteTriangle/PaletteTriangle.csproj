@@ -66,6 +66,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.0.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Xilium.CefGlue">
       <HintPath>xilium.cefglue\Xilium.CefGlue.dll</HintPath>
     </Reference>
@@ -88,11 +91,16 @@
     <Compile Include="Models\PaletteColor.cs" />
     <Compile Include="Models\Selector.cs" />
     <Compile Include="Models\VariableColor.cs" />
+    <Compile Include="ViewModels\ColorCanvasViewModel.cs" />
     <Compile Include="ViewModels\ColorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\PaletteColorViewModel.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\ColorCanvasWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -106,7 +114,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ColorUtil.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\ColorCanvasWindow.xaml.cs">
+      <DependentUpon>ColorCanvasWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
