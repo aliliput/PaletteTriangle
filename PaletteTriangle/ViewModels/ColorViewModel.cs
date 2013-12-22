@@ -9,8 +9,9 @@ namespace PaletteTriangle.ViewModels
 {
     public class ColorViewModel : ViewModel
     {
-        public ColorViewModel(VariableColor model)
+        public ColorViewModel(PageViewModel parent, VariableColor model)
         {
+            this.Parent = parent;
             this.Model = model;
             this.CompositeDisposable.Add(new PropertyChangedEventListener(model)
             {
@@ -25,6 +26,7 @@ namespace PaletteTriangle.ViewModels
             });
         }
 
+        public PageViewModel Parent { get; private set; }
         public VariableColor Model { get; private set; }
 
         public string Name
@@ -59,16 +61,24 @@ namespace PaletteTriangle.ViewModels
         public async void EditColor()
         {
             var solid = this.Color as SolidColorBrush;
-            var vm = new ColorCanvasViewModel(solid != null
+            using (var vm = new ColorCanvasViewModel(solid != null
                 ? solid.Color
-                : (this.Color as LinearGradientBrush).GradientStops.First().Color
-            );
-            
-            await this.Messenger.GetResponseAsync(new TransitionMessage(vm, "ShowColorCanvas"));
-
-            if (vm.IsSet)
+                : (this.Color as LinearGradientBrush).GradientStops.First().Color))
             {
-                this.Model.Color = new SolidColorBrush(vm.SelectedColor);
+
+                await this.Messenger.GetResponseAsync(new TransitionMessage(vm, "ShowColorCanvas"));
+                if (vm.IsSet)
+                    this.Model.Color = new SolidColorBrush(vm.SelectedColor);
+            }
+        }
+
+        public async void CreateLinearGradient()
+        {
+            using (var vm = new LinearGradientCanvasViewModel(this.Color, this.Parent.Parent.SelectableColors))
+            {
+                await this.Messenger.GetResponseAsync(new TransitionMessage(vm, "ShowLinearGradientCanvas"));
+                if (vm.IsSet)
+                    this.Model.Color = vm.Brush;
             }
         }
     }

@@ -4,9 +4,11 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-        xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:vm="clr-namespace:PaletteTriangle.ViewModels"
-        Title="色の編集" Height="340" Width="252" ResizeMode="NoResize">
+        Title="色の編集" Height="345" Width="252"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <vm:ColorCanvasViewModel />
     </Window.DataContext>
@@ -21,7 +23,7 @@
         <toolkit:ColorCanvas Grid.Row="0" Background="Transparent" BorderBrush="Transparent" SelectedColor="{Binding SelectedColor}" />
         
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="OK" Width="80" Margin="0,0,6,0">
+            <Button Content="OK" Width="80" Margin="0,0,6,0" IsDefault="True">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:ChangePropertyAction TargetObject="{Binding}" PropertyName="IsSet" Value="True" />
@@ -34,7 +36,7 @@
                 </i:Interaction.Triggers>
             </Button>
             
-            <Button Content="キャンセル" Width="80">
+            <Button Content="キャンセル" Width="80" IsCancel="True">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <l:WindowInteractionMessageAction>

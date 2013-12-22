@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,7 +15,6 @@ using PaletteTriangle.Models;
 using PaletteTriangle.ViewModels;
 using Xilium.CefGlue;
 using Xilium.CefGlue.WPF;
-using System.Threading.Tasks;
 
 namespace PaletteTriangle.Views
 {

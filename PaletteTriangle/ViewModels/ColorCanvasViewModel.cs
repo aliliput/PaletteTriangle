@@ -5,12 +5,12 @@ namespace PaletteTriangle.ViewModels
 {
     public class ColorCanvasViewModel : ViewModel
     {
-        public ColorCanvasViewModel() : this(Colors.White) { }
-
         public ColorCanvasViewModel(Color color)
         {
             this.SelectedColor = color;
         }
+
+        public ColorCanvasViewModel() : this(Colors.White) { }
 
         private Color selectedColor;
         public Color SelectedColor

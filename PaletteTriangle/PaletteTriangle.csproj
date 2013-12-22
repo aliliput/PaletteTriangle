@@ -93,10 +93,15 @@
     <Compile Include="Models\VariableColor.cs" />
     <Compile Include="ViewModels\ColorCanvasViewModel.cs" />
     <Compile Include="ViewModels\ColorViewModel.cs" />
+    <Compile Include="ViewModels\LinearGradientCanvasViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
     <Compile Include="ViewModels\PaletteColorViewModel.cs" />
     <Page Include="Views\ColorCanvasWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LinearGradientCanvasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,6 +121,9 @@
     <Compile Include="ColorUtil.cs" />
     <Compile Include="Views\ColorCanvasWindow.xaml.cs">
       <DependentUpon>ColorCanvasWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LinearGradientCanvasWindow.xaml.cs">
+      <DependentUpon>LinearGradientCanvasWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

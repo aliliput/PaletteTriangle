@@ -118,6 +118,10 @@
                                 <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="ShowColorCanvas">
                                     <l:TransitionInteractionMessageAction Mode="Modal" WindowType="v:ColorCanvasWindow" />
                                 </l:InteractionMessageTrigger>
+
+                                <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="ShowLinearGradientCanvas">
+                                    <l:TransitionInteractionMessageAction Mode="Modal" WindowType="v:LinearGradientCanvasWindow" />
+                                </l:InteractionMessageTrigger>
                             </i:Interaction.Triggers>
                         </StackPanel>
                     </DataTemplate>
@@ -151,6 +155,14 @@
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Click">
                                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="EditColor" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </MenuItem>
+
+                                    <MenuItem Header="グラデーションの作成">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click">
+                                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CreateLinearGradient" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </MenuItem>

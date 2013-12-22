@@ -14,7 +14,7 @@ namespace PaletteTriangle.ViewModels
             this.Model = model;
             this.DirectoryUri = new Uri(model.Directory.FullName + "/");
             this.IndexUri = new Uri(this.DirectoryUri, model.IndexPage);
-            this.Colors = model.Colors.Select(c => new ColorViewModel(c)).ToReadOnlyCollection();
+            this.Colors = model.Colors.Select(c => new ColorViewModel(this, c)).ToReadOnlyCollection();
         }
 
         public MainWindowViewModel Parent { get; private set; }
@@ -43,6 +43,14 @@ namespace PaletteTriangle.ViewModels
         public void RaiseIsCurrentChanged()
         {
             this.RaisePropertyChanged(() => this.IsCurrent);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                this.Colors.ForEach(c => c.Dispose());
+
+            base.Dispose(disposing);
         }
     }
 }

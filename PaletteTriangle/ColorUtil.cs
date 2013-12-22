@@ -59,7 +59,7 @@ namespace PaletteTriangle
                 return solid.Color.ToCss();
             var linear = brush as LinearGradientBrush;
             if (linear != null)
-                return string.Format("linear-gradient({0})", string.Join(", ", linear.GradientStops.Select(s => s.Color)));
+                return string.Format("linear-gradient({0})", string.Join(", ", linear.GradientStops.Select(s => s.Color.ToCss())));
 
             throw new ArgumentException("対応していない brush です。");
         }

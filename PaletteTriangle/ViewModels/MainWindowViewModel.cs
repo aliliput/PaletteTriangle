@@ -35,7 +35,10 @@ namespace PaletteTriangle.ViewModels
             });
             this.CompositeDisposable.Add(new CollectionChangedEventListener(
                 this.Palettes,
-                (sender, e) => this.RaisePropertyChanged(() => this.SelectableColors)
+                (sender, e) => this.SelectableColors = this.Palettes
+                    .Where(p => p.Enabled)
+                    .SelectMany(p => p.Colors.Select(c => new PaletteColorViewModel(c)))
+                    .ToReadOnlyCollection()
             ));
             this.CompositeDisposable.Add(new EventListener<EventHandler<CreatedScriptToRunEventArgs>>(
                 h => this.Model.CreatedScriptToRun += h,
@@ -109,12 +112,21 @@ namespace PaletteTriangle.ViewModels
             }
         }
 
-        public IEnumerable<PaletteColorViewModel> SelectableColors
+        private ReadOnlyCollection<PaletteColorViewModel> selectableColors = Enumerable.Empty<PaletteColorViewModel>().ToReadOnlyCollection();
+        public ReadOnlyCollection<PaletteColorViewModel> SelectableColors
         {
             get
             {
-                return this.Palettes.Where(p => p.Enabled)
-                    .SelectMany(p => p.Colors.Select(c => new PaletteColorViewModel(c)));
+                return this.selectableColors;
+            }
+            private set
+            {
+                if (!this.selectableColors.SequenceEqual(value))
+                {
+                    this.selectableColors.ForEach(c => c.Dispose());
+                    this.selectableColors = value;
+                    this.RaisePropertyChanged();
+                }
             }
         }
 
