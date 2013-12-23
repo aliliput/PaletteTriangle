@@ -41,8 +41,8 @@ namespace PaletteTriangle.Models
             return new DirectoryInfo(directory).EnumerateDirectories()
                 .Select(d => new { Directory = d, Manifest = Path.Combine(d.FullName, "manifest.xml") })
                 .Where(x => File.Exists(x.Manifest))
-                .Select(x => new { x.Directory, Manifest = XDocument.Parse(File.ReadAllText(x.Manifest)).Element(ns + "page") })
-                .Select(x => new Page(
+                .ThroughError(x => new { x.Directory, Manifest = XDocument.Parse(File.ReadAllText(x.Manifest)).Element(ns + "page") })
+                .ThroughError(x => new Page(
                     x.Directory,
                     x.Manifest.Element(ns + "title").Value,
                     x.Manifest.Element(ns + "index").Value,

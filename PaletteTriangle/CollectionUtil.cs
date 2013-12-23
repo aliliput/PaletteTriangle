@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -15,6 +16,26 @@ namespace PaletteTriangle
             if (list != null) return new ReadOnlyCollection<T>(list);
 
             return new ReadOnlyCollection<T>(source.ToArray());
+        }
+
+        public static IEnumerable<TResult> ThroughError<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            foreach (var elm in source)
+            {
+                var result = default(TResult);
+                var raisedException = false;
+                try
+                {
+                    result = selector(elm);
+                }
+                catch
+                {
+                    raisedException = true;
+                }
+
+                if (!raisedException)
+                    yield return result;
+            }
         }
     }
 }
