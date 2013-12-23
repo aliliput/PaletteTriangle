@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Livet;
 using PaletteTriangle.AdobeSwatchExchange;
@@ -14,7 +14,7 @@ namespace PaletteTriangle.Models
         }
 
         public string Name { get; private set; }
-        public ReadOnlyCollection<PaletteColor> Colors { get; private set; }
+        public IReadOnlyCollection<PaletteColor> Colors { get; private set; }
 
         private bool enabled = true;
         public bool Enabled

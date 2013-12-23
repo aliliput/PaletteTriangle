@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows.Media;
 using Livet;
 
@@ -15,7 +14,7 @@ namespace PaletteTriangle.Models
             this.SetDefaultColor();
         }
 
-        public ReadOnlyCollection<Selector> Selectors { get; private set; }
+        public IReadOnlyCollection<Selector> Selectors { get; private set; }
         public string Name { get; private set; }
         public string Default { get; private set; }
 

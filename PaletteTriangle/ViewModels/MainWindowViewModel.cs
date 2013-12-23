@@ -31,15 +31,14 @@ namespace PaletteTriangle.ViewModels
                         this.Pages = newPages;
                         this.CurrentPage = newCurrentPage;
                     }
+                },
+                {
+                    () => this.Model.EnabledPalettes,
+                    (sender, e) => this.SelectableColors = this.Model.EnabledPalettes
+                        .SelectMany(p => p.Colors.Select(c => new PaletteColorViewModel(c)))
+                        .ToReadOnlyCollection()
                 }
             });
-            this.CompositeDisposable.Add(new CollectionChangedEventListener(
-                this.Palettes,
-                (sender, e) => this.SelectableColors = this.Palettes
-                    .Where(p => p.Enabled)
-                    .SelectMany(p => p.Colors.Select(c => new PaletteColorViewModel(c)))
-                    .ToReadOnlyCollection()
-            ));
             this.CompositeDisposable.Add(new EventListener<EventHandler<CreatedScriptToRunEventArgs>>(
                 h => this.Model.CreatedScriptToRun += h,
                 h => this.Model.CreatedScriptToRun -= h,
@@ -54,8 +53,8 @@ namespace PaletteTriangle.ViewModels
             this.Model.Initialize();
         }
 
-        private ReadOnlyCollection<PageViewModel> pages = Enumerable.Empty<PageViewModel>().ToReadOnlyCollection();
-        public ReadOnlyCollection<PageViewModel> Pages
+        private IReadOnlyCollection<PageViewModel> pages = new PageViewModel[0];
+        public IReadOnlyCollection<PageViewModel> Pages
         {
             get
             {
@@ -112,8 +111,8 @@ namespace PaletteTriangle.ViewModels
             }
         }
 
-        private ReadOnlyCollection<PaletteColorViewModel> selectableColors = Enumerable.Empty<PaletteColorViewModel>().ToReadOnlyCollection();
-        public ReadOnlyCollection<PaletteColorViewModel> SelectableColors
+        private IReadOnlyCollection<PaletteColorViewModel> selectableColors = new PaletteColorViewModel[0];
+        public IReadOnlyCollection<PaletteColorViewModel> SelectableColors
         {
             get
             {
@@ -121,7 +120,7 @@ namespace PaletteTriangle.ViewModels
             }
             private set
             {
-                if (!this.selectableColors.SequenceEqual(value))
+                if (this.selectableColors != value)
                 {
                     this.selectableColors.ForEach(c => c.Dispose());
                     this.selectableColors = value;

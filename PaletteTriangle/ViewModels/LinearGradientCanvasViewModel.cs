@@ -30,7 +30,7 @@ namespace PaletteTriangle.ViewModels
                 ),
                 DispatcherHelper.UIDispatcher
             );
-            this.SelectableColors = (selectableColors ?? Enumerable.Empty<PaletteColorViewModel>()).ToReadOnlyCollection();
+            this.SelectableColors = (selectableColors ?? new PaletteColorViewModel[0]).ToReadOnlyCollection();
         }
 
         public LinearGradientCanvasViewModel()
@@ -110,7 +110,7 @@ namespace PaletteTriangle.ViewModels
             }
         }
 
-        public ReadOnlyCollection<PaletteColorViewModel> SelectableColors { get; private set; }
+        public IReadOnlyCollection<PaletteColorViewModel> SelectableColors { get; private set; }
 
         public void AddColor(Color color)
         {

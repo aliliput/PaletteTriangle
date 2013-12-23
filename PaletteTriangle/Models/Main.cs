@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -24,8 +25,8 @@ namespace PaletteTriangle.Models
             await Task.Run(() => this.Pages = Page.EnumeratePages(Path.Combine(AssemblyDirectory, "Pages")).ToReadOnlyCollection());
         }
 
-        private ReadOnlyCollection<Page> pages = Enumerable.Empty<Page>().ToReadOnlyCollection();
-        public ReadOnlyCollection<Page> Pages
+        private IReadOnlyCollection<Page> pages = new Page[0];
+        public IReadOnlyCollection<Page> Pages
         {
             get
             {
@@ -35,7 +36,7 @@ namespace PaletteTriangle.Models
             {
                 if (value == null) throw new ArgumentNullException();
 
-                if (!pages.SequenceEqual(value))
+                if (this.pages != value)
                 {
                     this.pages.ForEach(p => p.ColorChanged -= this.Pages_ColorChanged);
                     this.pages = value;
@@ -102,7 +103,8 @@ namespace PaletteTriangle.Models
             return source.Replace("\\", "\\\\").Replace("'", "\\'").Replace("\"", "\\\"");
         }
 
-        private ObservableCollection<Palette> palettes = new ObservableCollection<Palette>();
+        private readonly HashSet<string> paletteFiles = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly ObservableCollection<Palette> palettes = new ObservableCollection<Palette>();
         public ObservableCollection<Palette> Palettes
         {
             get
@@ -111,20 +113,34 @@ namespace PaletteTriangle.Models
             }
         }
 
+        public IReadOnlyCollection<Palette> EnabledPalettes
+        {
+            get
+            {
+                return this.Palettes.Where(p => p.Enabled).ToReadOnlyCollection();
+            }
+        }
+
         public async Task<bool> AddPalette(string fileName)
         {
-            return await Task.Run(() =>
+            if (paletteFiles.Contains(fileName))
+                return true;
+
+            try
             {
-                try
-                {
-                    AseFile.FromFile(fileName).Groups.ForEach(g => this.Palettes.Add(new Palette(g)));
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            });
+                await Task.Run(() => AseFile.FromFile(fileName).Groups
+                    .Select(g => new Palette(g))
+                    .Do(p => p.PropertyChanged += (sender, e) => this.RaisePropertyChanged(() => this.EnabledPalettes))
+                    .ForEach(this.Palettes.Add)
+                );
+                paletteFiles.Add(fileName);
+                this.RaisePropertyChanged(() => this.EnabledPalettes);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -7,15 +7,15 @@ namespace PaletteTriangle
 {
     public static class CollectionUtil
     {
-        public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
+        public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> source)
         {
-            var readOnlyCollection = source as ReadOnlyCollection<T>;
+            var readOnlyCollection = source as IReadOnlyCollection<T>;
             if (readOnlyCollection != null) return readOnlyCollection;
 
             var list = source as IList<T>;
             if (list != null) return new ReadOnlyCollection<T>(list);
 
-            return new ReadOnlyCollection<T>(source.ToArray());
+            return source.ToArray();
         }
 
         public static IEnumerable<TResult> ThroughError<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)

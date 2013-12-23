@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using Livet;
 using PaletteTriangle.Models;
@@ -30,7 +30,7 @@ namespace PaletteTriangle.ViewModels
 
         public Uri DirectoryUri { get; private set; }
         public Uri IndexUri { get; private set; }
-        public ReadOnlyCollection<ColorViewModel> Colors { get; private set; }
+        public IReadOnlyCollection<ColorViewModel> Colors { get; private set; }
 
         public bool IsCurrent
         {

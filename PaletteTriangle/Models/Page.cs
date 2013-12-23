@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -26,7 +25,7 @@ namespace PaletteTriangle.Models
         public DirectoryInfo Directory { get; private set; }
         public string Title { get; private set; }
         public string IndexPage { get; private set; }
-        public ReadOnlyCollection<VariableColor> Colors { get; private set; }
+        public IReadOnlyCollection<VariableColor> Colors { get; private set; }
 
         public event EventHandler<ColorChangedEventArgs> ColorChanged;
 
