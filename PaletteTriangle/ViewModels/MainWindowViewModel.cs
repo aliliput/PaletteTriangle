@@ -143,5 +143,22 @@ namespace PaletteTriangle.ViewModels
             if (result.Contains(false))
                 await this.Messenger.RaiseAsync(new InformationMessage("パレットの読み込みに失敗しました。", "エラー", MessageBoxImage.Error, "MessageBox"));
         }
+
+        private ColorViewModel selectedColor;
+        public ColorViewModel SelectedColor
+        {
+            get
+            {
+                return this.selectedColor;
+            }
+            set
+            {
+                if (this.selectedColor != value)
+                {
+                    this.selectedColor = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
     }
 }

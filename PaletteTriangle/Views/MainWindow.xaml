@@ -104,7 +104,8 @@
 
             <ListBox Grid.Column="0"
                      HorizontalContentAlignment="Stretch"
-                     ItemsSource="{Binding CurrentPage.Colors}">
+                     ItemsSource="{Binding CurrentPage.Colors}"
+                     SelectedItem="{Binding SelectedColor}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="6">
@@ -122,6 +123,10 @@
                                 <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="ShowLinearGradientCanvas">
                                     <l:TransitionInteractionMessageAction Mode="Modal" WindowType="v:LinearGradientCanvasWindow" />
                                 </l:InteractionMessageTrigger>
+                                
+                                <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="Copy">
+                                    <v:CopyAction />
+                                </l:InteractionMessageTrigger>
                             </i:Interaction.Triggers>
                         </StackPanel>
                     </DataTemplate>
@@ -134,13 +139,7 @@
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu>
-                                    <MenuItem Header="コピー">
-                                        <MenuItem.Style>
-                                            <Style TargetType="MenuItem">
-                                                <EventSetter Event="Click" Handler="copyMenuItem_Click" />
-                                            </Style>
-                                        </MenuItem.Style>
-                                    </MenuItem>
+                                    <MenuItem Header="コピー" Command="{Binding CopyCommand}" />
                                     
                                     <MenuItem Header="デフォルトに戻す">
                                         <i:Interaction.Triggers>
@@ -172,6 +171,10 @@
                         </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
+                
+                <ListBox.InputBindings>
+                    <KeyBinding Modifiers="Control" Key="C" Command="{Binding SelectedColor.CopyCommand}" />
+                </ListBox.InputBindings>
             </ListBox>
 
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />

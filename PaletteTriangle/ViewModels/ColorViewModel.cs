@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows.Media;
 using Livet;
+using Livet.Commands;
 using Livet.EventListeners;
 using Livet.Messaging;
 using PaletteTriangle.Models;
@@ -79,6 +80,17 @@ namespace PaletteTriangle.ViewModels
                 await this.Messenger.GetResponseAsync(new TransitionMessage(vm, "ShowLinearGradientCanvas"));
                 if (vm.IsSet)
                     this.Model.Color = vm.Brush;
+            }
+        }
+
+        private ViewModelCommand copyCommand;
+        public ViewModelCommand CopyCommand
+        {
+            get
+            {
+                return this.copyCommand = this.copyCommand ?? new ViewModelCommand(
+                    async () => await this.Messenger.RaiseAsync(new GenericInteractionMessage<string>(this.CssFormat, "Copy"))
+                );
             }
         }
     }

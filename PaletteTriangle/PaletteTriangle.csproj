@@ -122,6 +122,7 @@
     <Compile Include="Views\ColorCanvasWindow.xaml.cs">
       <DependentUpon>ColorCanvasWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CopyAction.cs" />
     <Compile Include="Views\LinearGradientCanvasWindow.xaml.cs">
       <DependentUpon>LinearGradientCanvasWindow.xaml</DependentUpon>
     </Compile>
