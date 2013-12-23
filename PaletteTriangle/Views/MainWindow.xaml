@@ -130,6 +130,7 @@
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <EventSetter Event="MouseLeftButtonUp" Handler="colorsListBoxItem_MouseLeftButtonUp" />
+                        <EventSetter Event="KeyUp" Handler="colorsListBoxItem_KeyUp" />
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu>

@@ -125,7 +125,7 @@ namespace PaletteTriangle.Views
             this.compositeDisposable.Dispose();
         }
 
-        private void colorsListBoxItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void ShowColorsContextMenu(object sender)
         {
             var item = sender as ListBoxItem;
             this.colorsContextMenu.ItemsSource = this.viewModel.SelectableColors;
@@ -133,6 +133,17 @@ namespace PaletteTriangle.Views
             this.colorsContextMenu.PlacementTarget = item;
             this.colorsContextMenu.Tag = item.DataContext;
             this.colorsContextMenu.IsOpen = true;
+        }
+
+        private void colorsListBoxItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.ShowColorsContextMenu(sender);
+        }
+
+        private void colorsListBoxItem_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return || e.Key == Key.Space)
+                this.ShowColorsContextMenu(sender);
         }
 
         private void colorsContextMenuItem_Click(object sender, RoutedEventArgs e)
@@ -152,7 +163,7 @@ namespace PaletteTriangle.Views
                 frame.ExecuteJavaScript(script, frame.Url, 0);
             });
         }
-
+        
         private void copyMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(((sender as MenuItem).DataContext as ColorViewModel).CssFormat);
