@@ -86,7 +86,11 @@ namespace PaletteTriangle.Models
                         }})();",
                         EscapeJsStr(s.Query),
                         Regex.Replace(s.Property, @"\-(.)", m => m.Groups[1].Value.ToUpper()),
-                        EscapeJsStr(string.Format(string.IsNullOrEmpty(s.Template) ? "{0}" : s.Template, color.Color.ToCss()))
+                        EscapeJsStr(string.Format(
+                            string.IsNullOrEmpty(s.Template) ? "{0}" : s.Template,
+                            color.Color.ToCss(),
+                            color.Color.ToDark().ToCss()
+                        ))
                     );
                     this.CreatedScriptToRun(this, new CreatedScriptToRunEventArgs(script));
                 });

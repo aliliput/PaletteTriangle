@@ -136,5 +136,18 @@ namespace PaletteTriangle
 
             throw new ArgumentException("対応していないフォーマットです。");
         }
+
+        public static Color ToDark(this Brush brush)
+        {
+            var solid = brush as SolidColorBrush;
+            if (solid == null) return Colors.Black;
+            var color = solid.Color;
+            return Color.FromArgb(
+                color.A,
+                (byte)Math.Max(color.R - 136, 0),
+                (byte)Math.Max(color.G - 136, 0),
+                (byte)Math.Max(color.B - 136, 0)
+            );
+        }
     }
 }
