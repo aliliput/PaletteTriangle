@@ -1,0 +1,3 @@
+[submodule "PaletteTriangle/Colortester"]
+	path = PaletteTriangle/Colortester
+	url = git@github.com:aliliput/Colortester.git
