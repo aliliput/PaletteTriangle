@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -135,9 +136,65 @@ namespace PaletteTriangle.Views
             this.colorsContextMenu.IsOpen = true;
         }
 
+        private readonly Dictionary<object, DispatcherTimer> timers = new Dictionary<object, DispatcherTimer>();
+        private const double DoubleClickTime = 200; // OS 標準より短め
+        private readonly HashSet<object> gotUp = new HashSet<object>();
+
+        private void colorsListBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.gotUp.Remove(sender);
+
+            if (this.timers.ContainsKey(sender) && this.timers[sender].IsEnabled)
+            {
+                this.timers[sender].Stop();
+                this.timers.Remove(sender);
+
+                // Double Click
+                ((sender as ListBoxItem).DataContext as ColorViewModel).EditColor();
+            }
+            else
+            {
+                var timer = new DispatcherTimer();
+                timer.Tag = sender;
+                timer.Interval = TimeSpan.FromMilliseconds(DoubleClickTime);
+                timer.Tick += this.timer_Tick;
+                timer.Start();
+                this.timers[sender] = timer;
+            }
+        }
+
         private void colorsListBoxItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.ShowColorsContextMenu(sender);
+            if (this.timers.ContainsKey(sender))
+            {
+                var timer = this.timers[sender] as DispatcherTimer;
+                if (timer.IsEnabled)
+                {
+                    this.gotUp.Add(sender);
+                }
+                else
+                {
+                    this.timers.Remove(sender);
+
+                    // Single Click
+                    this.ShowColorsContextMenu(sender);
+                }
+            }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            var timer = sender as DispatcherTimer;
+            timer.Stop();
+
+            if (this.gotUp.Contains(timer.Tag))
+            {
+                this.gotUp.Remove(timer.Tag);
+                this.timers.Remove(timer.Tag);
+
+                // Single Click
+                this.ShowColorsContextMenu(timer.Tag);
+            }
         }
 
         private void colorsListBoxItem_KeyUp(object sender, KeyEventArgs e)
