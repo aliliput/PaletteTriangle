@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Livet;
 using PaletteTriangle.Models;
@@ -12,8 +13,7 @@ namespace PaletteTriangle.ViewModels
         {
             this.Parent = parent;
             this.Model = model;
-            this.DirectoryUri = new Uri(model.Directory.FullName + "/");
-            this.IndexUri = new Uri(this.DirectoryUri, model.IndexPage);
+            this.IndexUri = new Uri(Path.Combine(model.ManifestFile.Directory.FullName, model.IndexPage));
             this.Colors = model.Colors.Select(c => new ColorViewModel(this, c)).ToReadOnlyCollection();
         }
 
@@ -28,7 +28,6 @@ namespace PaletteTriangle.ViewModels
             }
         }
 
-        public Uri DirectoryUri { get; private set; }
         public Uri IndexUri { get; private set; }
         public IReadOnlyCollection<ColorViewModel> Colors { get; private set; }
 

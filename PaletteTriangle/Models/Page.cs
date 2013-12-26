@@ -8,9 +8,9 @@ namespace PaletteTriangle.Models
 {
     public class Page
     {
-        public Page(DirectoryInfo directory, string title, string indexPage, IEnumerable<VariableColor> colors)
+        public Page(FileInfo manifestFile, string title, string indexPage, IEnumerable<VariableColor> colors)
         {
-            this.Directory = directory;
+            this.ManifestFile = manifestFile;
             this.Title = title;
             this.IndexPage = indexPage;
             this.Colors = colors.ToReadOnlyCollection();
@@ -22,7 +22,7 @@ namespace PaletteTriangle.Models
             });
         }
 
-        public DirectoryInfo Directory { get; private set; }
+        public FileInfo ManifestFile { get; private set; }
         public string Title { get; private set; }
         public string IndexPage { get; private set; }
         public IReadOnlyCollection<VariableColor> Colors { get; private set; }
@@ -37,15 +37,13 @@ namespace PaletteTriangle.Models
         public static IEnumerable<Page> EnumeratePages(string directory)
         {
             XNamespace ns = "http://schemas.azyobuzi.net/PaletteTriangle";
-            return new DirectoryInfo(directory).EnumerateDirectories()
-                .Select(d => new { Directory = d, Manifest = Path.Combine(d.FullName, "manifest.xml") })
-                .Where(x => File.Exists(x.Manifest))
-                .ThroughError(x => new { x.Directory, Manifest = XDocument.Parse(File.ReadAllText(x.Manifest)).Element(ns + "page") })
+            return new DirectoryInfo(directory).EnumerateFiles("*.xml", SearchOption.AllDirectories)
+                .ThroughError(file => Tuple.Create(file, XDocument.Parse(File.ReadAllText(file.FullName)).Element(ns + "page")))
                 .ThroughError(x => new Page(
-                    x.Directory,
-                    x.Manifest.Element(ns + "title").Value,
-                    x.Manifest.Element(ns + "index").Value,
-                    x.Manifest.Element(ns + "colors").Elements(ns + "color")
+                    x.Item1,
+                    x.Item2.Element(ns + "title").Value,
+                    x.Item2.Element(ns + "index").Value,
+                    x.Item2.Element(ns + "colors").Elements(ns + "color")
                         .Select(c => new VariableColor(
                             c.Elements(ns + "selector").Select(s => new Selector(
                                 s.Attribute("selector").Value,

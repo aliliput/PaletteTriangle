@@ -25,7 +25,7 @@ namespace PaletteTriangle.ViewModels
                     {
                         var newPages = this.Model.Pages.Select(p => new PageViewModel(this, p)).ToReadOnlyCollection();
                         var newCurrentPage = this.CurrentPage != null
-                            ? newPages.FirstOrDefault(p => p.DirectoryUri == this.CurrentPage.DirectoryUri)
+                            ? newPages.FirstOrDefault(p => p.Model.ManifestFile.FullName.Equals(this.CurrentPage.Model.ManifestFile.FullName, StringComparison.InvariantCultureIgnoreCase))
                             : null;
                         this.Pages.ForEach(p => p.Dispose());
                         this.Pages = newPages;
